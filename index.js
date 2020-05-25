@@ -46,10 +46,6 @@ app.use(authMiddleware.checkLogin);
 
 app.use('/transactions', transactionRoute);
 
-app.get('/', function (req, res) {
-  res.send('hello world');
-})
-
 app.use('/users', userRoute);
 
 app.listen(3000);
