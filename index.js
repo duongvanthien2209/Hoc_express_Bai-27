@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const mongoose = require('mongoose');
 
+const port = process.env.PORT || 3000;
+
 const app = express();
 
 // Liên kết database MongoDB atlas dùng mongoose
@@ -48,4 +50,4 @@ app.use('/transactions', transactionRoute);
 
 app.use('/users', userRoute);
 
-app.listen(3000);
+app.listen(port);
