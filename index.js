@@ -26,11 +26,30 @@ app.use(express.static('public'));
 
 // Routes
 const authRoute = require('./routes/auth.route');
+const userRoute = require('./routes/user.route');
+const bookRoute = require('./routes/book.route');
+const transactionRoute = require('./routes/transaction.route');
+const apiRoute = require('./routes/api.route');
+
+// Middlewares
+const authMiddleware = require('./middlewares/auth.middleware');
 
 app.use('/auth', authRoute);
+
+app.use('/api', apiRoute);
+
+app.use(authMiddleware.checkSession);
+
+app.use('/books', bookRoute);
+
+app.use(authMiddleware.checkLogin);
+
+app.use('/transactions', transactionRoute);
 
 app.get('/', function (req, res) {
   res.send('hello world');
 })
+
+app.use('/users', userRoute);
 
 app.listen(3000);

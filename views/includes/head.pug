@@ -1,0 +1,21 @@
+nav.navbar.navbar-expand-lg.navbar-light.bg-light
+  a.navbar-brand(href='#') BookStore
+  button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation')
+    span.navbar-toggler-icon
+  #navbarSupportedContent.collapse.navbar-collapse
+    ul.navbar-nav.mr-auto
+      li.nav-item
+        a.nav-link(href='/books' class= user?user.isAdmin?'disabled':'':'') Book
+      li.nav-item
+        a.nav-link(href='/users' class= user?user.isAdmin?'':'disabled':'disabled') User
+      li.nav-item
+        a.nav-link(href='/transactions/getAll' class= user?'':'disabled') Transaction
+      li.nav-item(style='position: relative;')
+        button.btn.btn-primary.dropdown-toggle(type='button' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false') Cart
+        ul.dropdown-menu
+          each item in cart
+            li.dropdown-item= item
+          li.dropdown-item
+            a.btn.btn-primary(href="/transactions/addToTransaction") Thuê
+    if user
+      p= user.name

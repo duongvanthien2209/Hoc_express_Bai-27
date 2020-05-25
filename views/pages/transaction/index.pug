@@ -1,0 +1,18 @@
+extends ../../layouts/default
+
+block Content
+    table.table
+        thead
+            tr
+                th(scope='col') #
+                th(scope='col') Người Thuê
+                th(scope='col') Sách
+                th(scope='col') Số lượng
+        tbody
+            - var dem = 0
+            each transaction in transactions
+                tr
+                    td= ++dem
+                    td= transaction.userName?transaction.userName:''
+                    td= transaction.bookName
+                    td= transaction.sluong

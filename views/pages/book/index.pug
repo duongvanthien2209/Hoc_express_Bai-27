@@ -1,0 +1,16 @@
+extends ../../layouts/default
+
+block style
+    link(href='/styles/customBook.css' rel='stylesheet')
+
+block Content
+    h1 Quản lý sách
+
+    .custom-grid
+        each book in books
+            .card
+                img.card-img-top(src= book.image, alt='Card image cap')
+                .card-body
+                    h4.card-title= book.name
+                    p.card-text= book.description
+                    a.btn.btn-primary(href='/books/add/' + book._id.valueOf()) Thêm vào giỏ

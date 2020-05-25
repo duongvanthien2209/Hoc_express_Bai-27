@@ -1,0 +1,28 @@
+extends ../../layouts/default
+
+block Content
+    table.table
+        thead
+            tr
+                th(scope='col') #
+                th(scope='col') Avatar
+                th(scope='col') Tên
+                th(scope='col') Email
+                th(scope='col') Số lần nhập sai
+                th(scope='col') Đặt lại
+                th(scope='col') Xóa
+        tbody
+            - var dem = 0
+            each user in users
+                tr
+                    td= ++dem
+                    td
+                        img.rounded-circle(src= user.avatar alt="" height="50px" width="50px")
+                    td= user.name
+                    td= user.email
+                    td= user.wrongLoginCount
+                    td
+                        a.btn.btn-primary(href="/users/resetWrongLoginCount/" + user._id.valueOf()) Reset
+                    td
+                        a.btn.btn-danger(href="/users/delete/" + user._id.valueOf()) Delete
+            
