@@ -32,6 +32,7 @@ const userRoute = require('./routes/user.route');
 const bookRoute = require('./routes/book.route');
 const transactionRoute = require('./routes/transaction.route');
 const apiRoute = require('./routes/api.route');
+const shopRoute = require('./routes/shop.route');
 
 // Middlewares
 const authMiddleware = require('./middlewares/auth.middleware');
@@ -46,8 +47,10 @@ app.use('/books', bookRoute);
 
 app.use(authMiddleware.checkLogin);
 
+app.use('/shops', shopRoute);
+
 app.use('/transactions', transactionRoute);
 
-app.use('/users', userRoute);
+app.use('/users', authMiddleware.checkAdmin, userRoute);
 
 app.listen(port);

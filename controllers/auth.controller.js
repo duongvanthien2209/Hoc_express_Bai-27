@@ -21,22 +21,22 @@ const saltRounds = 10;
 const User = require('../models/user.model');
 
 // Login
-module.exports.getLogin = function(req,res) {
+module.exports.getLogin = function (req, res) {
     res.render('pages/auth/login');
 }
 
-module.exports.postLogin = async function(req,res) {
+module.exports.postLogin = async function (req, res) {
     var errors = [];
 
     var email = req.body.email;
-    var user = await User.findOne({email});
-    if(!user) {
+    var user = await User.findOne({ email });
+    if (!user) {
         errors.push('Bạn nhập sai email');
-        res.render('pages/auth/login', {errors});
+        res.render('pages/auth/login', { errors });
         return;
     }
 
-    if(user.wrongLoginCount >= 4) {
+    if (user.wrongLoginCount >= 4) {
         const msg = {
             to: email,
             from: 'duongvanthienbkhoa@gmail.com',
@@ -50,18 +50,18 @@ module.exports.postLogin = async function(req,res) {
             console.log(errors);
         }
         errors.push('Bạn nhập sai quá sô lần quy định');
-        res.render('pages/auth/login', {errors});
+        res.render('pages/auth/login', { errors });
         return;
     }
 
 
     var password = req.body.password;
     var result = await bcrypt.compare(password, user.password);
-    if(!result) {
+    if (!result) {
         user.wrongLoginCount += 1;
         await user.save();
         errors.push('Bạn nhập sai password');
-        res.render('pages/auth/login', {errors});
+        res.render('pages/auth/login', { errors });
         return;
     }
 
@@ -70,16 +70,16 @@ module.exports.postLogin = async function(req,res) {
 }
 
 // Create User
-module.exports.getCreate = function(req,res) {
+module.exports.getCreate = function (req, res) {
     res.render('pages/auth/create');
 }
 
-module.exports.postCreate = async function(req,res,next) {
+module.exports.postCreate = async function (req, res, next) {
     var avatar;
 
-    if(!req.file) {
+    if (!req.file) {
         avatar = 'https://loremflickr.com/320/240/dog';
-    }else {
+    } else {
         var result = await cloudinary.uploader.upload(req.file.path);
         avatar = result.url;
     }
@@ -89,4 +89,50 @@ module.exports.postCreate = async function(req,res,next) {
 
     await user.save();
     res.redirect('/auth/login');
+}
+
+// Create Shop
+module.exports.postCreateShop = function (req, res, next) {
+    var errors = [];
+    var name = req.body.name;
+
+    if (!name) {
+        errors.push('Bạn chưa nhập tên shop');
+    }
+
+    var description = req.body.description;
+
+    if (!description) {
+        errors.push('Bạn chưa nhập mô tả ngắn về shop');
+    }
+
+    if (errors.length > 0) {
+        res.render('pages/shop/create', { errors });
+        return;
+    }
+
+    next();
+}
+
+// Add book from shop
+module.exports.addBook = function (req, res, next) {
+    var errors = [];
+    var name = req.body.name;
+
+    if (!name) {
+        errors.push('Bạn chưa nhập tên sách');
+    }
+
+    var description = req.body.description;
+
+    if (!description) {
+        errors.push('Bạn chưa nhập mô tả ngắn về sách');
+    }
+
+    if (errors.length > 0) {
+        res.render('pages/book/create', { errors });
+        return;
+    }
+
+    next();
 }

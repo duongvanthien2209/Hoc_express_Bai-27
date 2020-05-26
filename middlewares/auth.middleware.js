@@ -22,6 +22,14 @@ module.exports.checkLogin = async function (req, res, next) {
 
 module.exports.checkSession = async function (req, res, next) {
     var sessionId = req.signedCookies.sessionId;
+    var userId = req.signedCookies.userId;
+
+    if(userId) {
+        var user = await User.findById(userId);
+        res.locals.user = user;
+    }
+
+
     if (!sessionId) {
         var session = new Session({ cart: {} });
         await session.save();
@@ -40,5 +48,27 @@ module.exports.checkSession = async function (req, res, next) {
         }
     }
     res.locals.cart = cart;
+    next();
+}
+
+module.exports.checkAdmin = async function(req,res,next) {
+    var userId = req.signedCookies.userId;
+    if(!userId) {
+        res.send('Có lỗi xảy ra');
+        return;
+    }
+
+    var user = await User.findById(userId);
+
+    if(!user) {
+        res.send('Có lỗi xảy ra');
+        return;
+    }
+
+    if(!user.isAdmin) {
+        res.send('Bạn không có quyền truy cập');
+        return;
+    }
+
     next();
 }
